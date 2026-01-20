@@ -5,7 +5,6 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: GestionNotes
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     ports:
       - "3307:3306"
     healthcheck:
@@ -25,7 +24,7 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/GestionNotes
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=
+      - SPRING_DATASOURCE_PASSWORD=root
     depends_on:
       db:
         condition: service_healthy

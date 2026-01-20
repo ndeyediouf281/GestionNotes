@@ -3,13 +3,17 @@ services:
     image: mysql:8.0
     container_name: gestion-notes-db
     restart: always
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_DATABASE: GestionNotes
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: "%"
     ports:
       - "3307:3306"
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      timeout: 20s
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
       retries: 10
 
   app:
@@ -22,9 +26,9 @@ services:
       - "coolify.managed=true"
       - "coolify.application=true"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/GestionNotes
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/GestionNotes?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
     depends_on:
       db:
         condition: service_healthy

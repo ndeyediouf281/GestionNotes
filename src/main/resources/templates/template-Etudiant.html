@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <link  rel="stylesheet" href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}"/>
+  <link  rel="stylesheet" href="../static/css/buttons.dataTables.min.css" th:href="@{/css/buttons.dataTables.min.css}"/>
+  <link  rel="stylesheet" href="../static/css/jquery.dataTables.min.css" th:href="@{/css/jquery.dataTables.min.css}"/>
+
+  <script src="../static/js/jquery-3.7.0.js" th:src="@{/js/jquery-3.7.0.js}"></script>
+  <script src="../static/js/bootstrap.js" th:src="@{/js/bootstrap.js}"></script>
+  <script src="../static/js/dataTables.buttons.min.js" th:src="@{/js/dataTables.buttons.min.js}"></script>
+  <script src="../static/js/jquery.dataTables.min.js" th:src="@{/js/jquery.dataTables.min.js}"></script>
+
+  <title>Accueil Etudiant</title>
+  <style>
+    /* Styles généraux */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: #f4f4f4;
+    }
+    header {
+        background-color: #2c3e50;
+        padding: 10px 20px;
+        color: white;
+    }
+
+    .navbar .nav {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .navbar .nav li {
+        margin-right: 15px;
+    }
+    .navbar .nav li a {
+        color: white;
+        text-decoration: none;
+        padding: 5px 10px;
+        transition: background-color 0.3s;
+    }
+    .navbar .nav li a:hover {
+        background-color: #34495e;
+        border-radius: 10px;
+    }
+    /* Pour forcer le bloc d'infos utilisateur à se placer à droite */
+    .navbar .navbar-right {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+    }
+    /* Dropdown pour le compte utilisateur */
+    .dropdown {
+        position: relative;
+    }
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: #34495e;
+        min-width: 150px;
+        list-style: none;
+        padding: 10px 0;
+        margin: 0;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    .dropdown-menu li a {
+        display: block;
+        padding: 8px 16px;
+        color: white;
+        text-decoration: none;
+    }
+    .dropdown-menu li a:hover {
+        background-color: #2c3e50;
+    }
+    .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+
+
+
+  </style>
+  <style>
+    /* Animation pour faire défiler le texte */
+    @keyframes scroll {
+        0% {
+            transform: translateX(100%);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+
+    .university-title {
+        display: inline-block;
+        white-space: nowrap;
+        animation: scroll 10s linear infinite;
+        color: blue; /* Couleur bleue pour le texte */
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-left">
+          <li>
+            <a><span>Accueil</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/EditerPE}">Éditer Profil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/mes-modules}">Module</a>
+          </li>
+          <li>
+            <a th:href="@{/releve}"><span>Relever</span></a>
+          </li>
+          <li>
+            <a th:href="@{/progression}"><span>Progession</span></a>
+          </li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <span th:text="${etudiant.prenom + ' ' + etudiant.nom}"></span><span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a th:href="@{/profil}"><span>Profil</span></a>
+              </li>
+              <li>
+                <a th:href="@{/logout}"><span>Déconnexion</span></a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+</header>
+
+<section layout:fragment="custom-content">
+
+</section>
+
+
+
+<div th:if="${error != null}">
+  <p th:text="${error}" style="color: red;"></p>
+</div>
+<h1 class="university-title">🎓 Bienvenue sur l'Espace Étudiant - Apprenez, Grandissez, Réussissez ! 📚</h1>
+
+<img th:src="@{/images/img_1.png}" alt="Université Assane Seck de Ziguinchor"
+     style="width:100%; max-height:400px; object-fit:cover;">
+
+</body>
+</html>

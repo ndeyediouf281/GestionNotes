@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tableau de bord Administrateur</title>
+    <style>
+        /* Styles généraux */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #2c3e50;
+            padding: 10px 20px;
+            color: white;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .navbar ul li {
+            margin-right: 15px;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            transition: background-color 0.3s;
+        }
+        .navbar ul li a:hover {
+            background-color: #34495e;
+            border-radius: 4px;
+        }
+        .dashboard-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .dashboard-container h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .card {
+            background-color: #ecf0f1;
+            width: 250px;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .card a {
+            display: inline-block;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .card a:hover {
+            background-color: #45a049;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #2c3e50;
+            color: white;
+            margin-top: 20px;
+        }
+        /* Alignement du menu utilisateur à droite */
+        .navbar .navbar-right {
+            margin-left: auto; /* Permet de pousser à droite */
+            display: flex;
+            justify-content: flex-end; /* Assure l'alignement à droite */
+            align-items: center;
+        }
+
+        .navbar .dropdown-toggle {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: white;
+        }
+
+        /* Masquer le menu déroulant par défaut */
+        .dropdown-menu {
+            display: none; /* Cacher le menu par défaut */
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-left">
+                    <li>
+                        <a th:src="@{/images/img.png}" ><span>Accueil</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/formations}"><span>Formation</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/Enseignants}"><span>Enseignant</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/etudiants}"><span>Etudiant</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/assignerResponsable}"><span>Assigner</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/liste}"><span>Inscription Formation</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/inscriptionModule}"><span>Inscription Module</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/deliberation}"><span>Délibération</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/releve/selectionner}"><span>Relevé</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/AffichageListes}"><span>Liste</span></a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <!-- Afficher le nom et prénom de l'administrateur connecté -->
+                            <span th:text="${prenom + ' ' + nom}"></span><span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a th:href="@{/profil}"><span>Profil</span></a>
+                            </li>
+                            <li><a th:href="@{/logout}"><i class="fa fa-sign-out"></i> Déconnexion</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</header>
+<div class="dashboard-container">
+    <h1>Tableau de bord Administrateur</h1>
+    <div class="card-container">
+
+        <!-- Carte 1 : Liste des enseignants intervenant dans une formation -->
+        <div class="card">
+            <h2>la liste des enseignants intervenant dans une formation</h2>
+            <a th:href="@{/formation/enseignants}">Voir la liste</a>
+        </div>
+        <div class="card">
+            <h2>la liste des étudiants inscrits à une formation</h2>
+            <a th:href="@{/etudiantsInscritsFormation}">Voir la liste</a>
+        </div>
+        <div class="card">
+            <h2>La liste des étudiants inscrits à un module</h2>
+            <a th:href="@{/etudiantsInscrits}">Voir la liste</a>
+        </div>
+        <!-- Carte 2 : Etudiants et leurs notes -->
+        <div class="card">
+            <h2> la liste des étudiants avec toutes leurs notes </h2>
+            <a th:href="@{/toutes}">Voir les notes</a>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    © 2025 Mon Application. Tous droits réservés.
+</footer>
+
+<!-- Ajouter Bootstrap JS et jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // Script pour rendre le menu déroulant interactif
+    $(document).ready(function() {
+        // Lorsque l'utilisateur clique sur le nom/prénom, afficher/masquer le menu
+        $('#userDropdown').click(function() {
+            $('.dropdown-menu').toggle(); // Toggle du menu
+        });
+    });
+</script>
+<div>
+    <a th:href="@{/Administrateur/Accueil}">Retour à l'accueil</a>
+</div>
+</body>
+</html>

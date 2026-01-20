@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Inscription des Étudiants aux Modules</title>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+      /* Masquer le formulaire par défaut */
+      #inscriptionForm {
+          display: none;
+          margin: 20px 0;
+          padding: 20px;
+          background-color: #f8f9fa;
+          border-radius: 5px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+
+      /* Style du bouton */
+      .center-btn {
+          text-align: center;
+          margin: 20px 0;
+      }
+    </style>
+
+  <!-- Styles et scripts inchangés -->
+  <style>
+    /* Styles généraux */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: #f4f4f4;
+    }
+    header {
+        background-color: #2c3e50;
+        padding: 10px 20px;
+        color: white;
+    }
+
+    .navbar .nav {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .navbar .nav li {
+        margin-right: 15px;
+    }
+    .navbar .nav li a {
+        color: white;
+        text-decoration: none;
+        padding: 5px 10px;
+        transition: background-color 0.3s;
+    }
+    .navbar .nav li a:hover {
+        background-color: #34495e;
+        border-radius: 10px;
+    }
+    /* Pour forcer le bloc d'infos utilisateur à se placer à droite */
+    .navbar .navbar-right {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+    }
+    /* Dropdown pour le compte utilisateur */
+    .dropdown {
+        position: relative;
+    }
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: #34495e;
+        min-width: 150px;
+        list-style: none;
+        padding: 10px 0;
+        margin: 0;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    .dropdown-menu li a {
+        display: block;
+        padding: 8px 16px;
+        color: white;
+        text-decoration: none;
+    }
+    .dropdown-menu li a:hover {
+        background-color: #2c3e50;
+    }
+    .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+     /* Styles pour l'en-tête universitaire */
+
+
+
+  </style>
+</head>
+<body>
+
+<header>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-left">
+          <li>
+            <a th:src="@{/images/img.png}" ><span>Accueil</span></a>
+          </li>
+          <li>
+            <a th:href="@{/formations}"><span>Formation</span></a>
+          </li>
+          <li>
+            <a th:href="@{/Enseignants}"><span>Enseignant</span></a>
+          </li>
+          <li>
+            <a th:href="@{/etudiants}"><span>Etudiant</span></a>
+          </li>
+          <li>
+            <a th:href="@{/assignerResponsable}"><span>Assigner</span></a>
+          </li>
+          <li>
+            <a th:href="@{/liste}"><span>Inscription Formation</span></a>
+          </li>
+          <li>
+            <a th:href="@{/inscriptionModule}"><span>Inscription Module</span></a>
+          </li>
+          <li>
+            <a th:href="@{/deliberation}"><span>Délibération</span></a>
+          </li>
+          <li>
+            <a th:href="@{/releve/selectionner}"><span>Relevé</span></a>
+          </li>
+          <li>
+            <a th:href="@{/AffichageListes}"><span>Liste</span></a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <!-- Afficher le nom et prénom de l'administrateur connecté -->
+              <span th:text="${prenom + ' ' + nom}"></span><span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a th:href="@{/profil}"><span>Profil</span></a>
+              </li>
+              <li><a th:href="@{/logout}"><i class="fa fa-sign-out"></i> Déconnexion</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+</header>
+
+<!-- Barre de navigation inchangée -->
+
+<div class="container mt-5">
+  <h1 class="text-center">Inscription des Étudiants aux Modules</h1>
+
+  <!-- Messages de succès/erreur -->
+  <div th:if="${successMessage}" class="alert alert-success">
+    <p th:text="${successMessage}"></p>
+  </div>
+  <div th:if="${errorMessage}" class="alert alert-danger">
+    <p th:text="${errorMessage}"></p>
+  </div>
+
+  <!-- Bouton pour afficher/masquer le formulaire -->
+  <div class="center-btn">
+    <button class="btn btn-primary" onclick="toggleForm()">
+      <i class="fas fa-user-plus"></i> Inscrire
+    </button>
+  </div>
+
+  <!-- Formulaire (masqué au départ) -->
+  <div id="inscriptionForm">
+    <h3>Inscrire un étudiant à un module</h3>
+    <form th:action="@{/inscrireModule}" method="post">
+      <div class="form-group">
+        <label for="etudiantId">Étudiant :</label>
+        <select class="form-control" id="etudiantId" name="etudiantId" required>
+          <option value="">Sélectionner un étudiant</option>
+          <option th:each="etudiant : ${etudiants}"
+                  th:value="${etudiant.id}"
+                  th:text="${etudiant.nom + ' ' + etudiant.prenom}"></option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="moduleId">Module :</label>
+        <select class="form-control" id="moduleId" name="moduleId" required>
+          <option value="">Sélectionner un module</option>
+          <option th:each="module : ${modules}"
+                  th:value="${module.id}"
+                  th:text="${module.libelle}"></option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-success">Valider</button>
+    </form>
+  </div>
+
+  <!-- Tableau des inscriptions -->
+  <div id="inscriptionsTable">
+    <h3 class="mt-4">Liste des Inscriptions</h3>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Étudiant</th>
+        <th>Module</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="inscription : ${inscriptions}">
+        <td th:text="${inscription.etudiant.nom + ' ' + inscription.etudiant.prenom}"></td>
+        <td th:text="${inscription.module.libelle}"></td>
+        <td>
+          <form th:action="@{/desinscrireModule}" method="post">
+            <input type="hidden" name="etudiantId" th:value="${inscription.etudiant.id}" />
+            <input type="hidden" name="moduleId" th:value="${inscription.module.id}" />
+            <button type="submit" class="btn btn-danger">Désinscrire</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Scripts JavaScript inchangés -->
+<!-- JavaScript -->
+<script>
+  function toggleForm() {
+      const form = document.getElementById('inscriptionForm');
+      // Basculer entre 'none' et 'block'
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  }
+</script>
+</body>
+</html>

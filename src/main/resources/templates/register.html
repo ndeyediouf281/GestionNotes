@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Inscription</title>
+  <link rel="stylesheet" href="/css/RegistrationForm.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #28a745;
+      color: white;
+      padding: 10px;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .error-message {
+      color: red;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Inscription</h2>
+  <form th:action="@{/register}" method="post">
+
+    <label for="nom">Nom :</label>
+    <input type="text" id="nom" name="nom" required placeholder="Votre nom">
+
+    <label for="prenom">Prénom :</label>
+    <input type="text" id="prenom" name="prenom" required placeholder="Votre prénom">
+
+    <label for="dateNaiss">Date de naissance :</label>
+    <input type="date" id="dateNaiss" name="dateNaiss" required>
+
+    <label for="sexe">Sexe :</label>
+    <select id="sexe" name="sexe" required>
+      <option value="Homme">Homme</option>
+      <option value="Femme">Femme</option>
+    </select>
+
+    <label for="adresse">Adresse :</label>
+    <input type="text" id="adresse" name="adresse" required placeholder="Votre adresse">
+
+    <label for="username">Nom d'utilisateur :</label>
+    <input type="text" id="username" name="username" required placeholder="Choisissez un nom d'utilisateur">
+
+    <label for="password">Mot de passe :</label>
+    <input type="password" id="password" name="password" required placeholder="Créez un mot de passe">
+
+    <label for="role">Rôle :</label>
+    <select id="role" name="role" required>
+      <option value="Etudiant">Étudiant</option>
+      <option value="Enseignant">Enseignant</option>
+      <option value="Administrateur">Administrateur</option>
+    </select>
+
+    <button type="submit">S'inscrire</button>
+  </form>
+
+  <!-- Affichage du message d'erreur si l'utilisateur existe déjà -->
+  <div th:if="${param.error == 'exists'}" class="error-message">
+    <p>Ce nom d'utilisateur existe déjà.</p>
+  </div>
+</div>
+
+<script>
+  if (window.location.search.includes("error=exists")) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+</script>
+
+</body>
+</html>

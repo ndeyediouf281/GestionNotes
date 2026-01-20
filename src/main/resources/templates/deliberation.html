@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Délibération des Résultats</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    /* Styles généraux */
+ body {
+   font-family: 'Poppins', sans-serif;
+   background-color: #f8f9fa;
+   margin: 0;
+   padding: 0;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   min-height: 100vh;
+ }
+
+ .container {
+   background: white;
+   padding: 20px;
+   border-radius: 10px;
+   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+   width: 90%;
+   max-width: 900px;
+ }
+
+ h1, h2, h3, h4 {
+   text-align: center;
+   color: #1d4369;
+   font-weight: 600;
+ }
+
+ /* Navigation */
+ .navbar {
+   background-color: #1d4369 !important;
+ }
+
+ .navbar a {
+   color: white !important;
+   font-weight: 500;
+ }
+
+ .navbar a:hover {
+   text-decoration: underline;
+ }
+
+ /* Formulaire */
+ form {
+   display: flex;
+   flex-direction: column;
+   gap: 15px;
+   margin-bottom: 20px;
+ }
+
+ label {
+   font-weight: bold;
+ }
+
+ select, button {
+   padding: 10px;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+   font-size: 16px;
+ }
+
+ button {
+   background-color: #1d4369;
+   color: white;
+   cursor: pointer;
+   transition: background 0.3s;
+   font-weight: 500;
+ }
+
+ button:hover {
+   background-color: #163354;
+ }
+
+ /* Tableau */
+ table {
+   width: 100%;
+   border-collapse: collapse;
+   margin-top: 20px;
+   background: white;
+   border-radius: 8px;
+   overflow: hidden;
+ }
+
+ thead {
+   background: #1d4369;
+   color: white;
+ }
+
+ th, td {
+   padding: 12px;
+   border: 1px solid #ddd;
+   text-align: center;
+ }
+
+ tbody tr:nth-child(even) {
+   background: #f1f1f1;
+ }
+
+ /* Statistiques */
+ .stats {
+   background: #e9ecef;
+   padding: 15px;
+   border-radius: 8px;
+   margin-top: 20px;
+   display: flex;
+   justify-content: space-between;
+   flex-wrap: wrap;
+ }
+
+ .stat-card {
+   flex: 1;
+   min-width: 120px;
+   text-align: center;
+   padding: 15px;
+   border-radius: 8px;
+   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+   background: white;
+ }
+
+ .highlight-number {
+   font-size: 22px;
+   font-weight: bold;
+   color: #1d4369;
+ }
+
+  </style>
+</head>
+<body class="bg-light">
+
+<header>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-left">
+          <li>
+            <a th:src="@{/images/img.png}" ><span>Accueil</span></a>
+          </li>
+          <li>
+            <a th:href="@{/formations}"><span>Formation</span></a>
+          </li>
+          <li>
+            <a th:href="@{/Enseignants}"><span>Enseignant</span></a>
+          </li>
+          <li>
+            <a th:href="@{/etudiants}"><span>Etudiant</span></a>
+          </li>
+          <li>
+            <a th:href="@{/assignerResponsable}"><span>Assigner</span></a>
+          </li>
+          <li>
+            <a th:href="@{/liste}"><span>Inscription Formation</span></a>
+          </li>
+          <li>
+            <a th:href="@{/inscriptionModule}"><span>Inscription Module</span></a>
+          </li>
+          <li>
+            <a th:href="@{/deliberation}"><span>Délibération</span></a>
+          </li>
+          <li>
+            <a th:href="@{/releve/selectionner}"><span>Relevé</span></a>
+          </li>
+          <li>
+            <a th:href="@{/AffichageListes}"><span>Liste</span></a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <!-- Afficher le nom et prénom de l'administrateur connecté -->
+              <span th:text="${prenom + ' ' + nom}"></span><span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a th:href="@{/profil}"><span>Profil</span></a>
+              </li>
+              <li><a th:href="@{/logout}"><i class="fa fa-sign-out"></i> Déconnexion</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+</header>
+<div class="container mt-3">
+  <h4 class="mb-3 text-primary">Résultats de la Délibération</h4>
+
+  <!-- Formulaire compact -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body p-3">
+      <form method="get" th:action="@{/deliberation}" class="form-compact">
+        <div class="row g-2 align-items-center">
+          <div class="col-md-8">
+            <label for="formationId" class="form-label">Formation</label>
+            <select id="formationId" name="formationId" class="form-select form-select-sm" required>
+              <option value="">Choisir...</option>
+              <option th:each="formation : ${formations}"
+                      th:value="${formation.id}"
+                      th:text="${formation.intitule}"></option>
+            </select>
+          </div>
+          <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary btn-sm w-100">
+              Analyser
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Section Statistiques compactes -->
+  <div th:if="${stats != null}">
+    <!-- Tableau compact -->
+    <div class="card shadow-sm">
+      <div class="card-body p-2">
+        <table class="table compact-table table-sm">
+          <thead>
+          <tr>
+            <th>Matricule</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Moyenne</th>
+            <th>Mention</th>
+            <th>Credit</th>
+            <th>Statut</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="deliberation : ${deliberations}">
+            <td th:text="${deliberation.etudiant.matricule}"></td>
+            <td th:text="${deliberation.etudiant.prenom}"></td>
+            <td th:text="${deliberation.etudiant.nom}"></td>
+            <td th:text="${#numbers.formatDecimal(deliberation.moyenne, 1, 2)}"></td>
+            <td>
+  <span th:text="${deliberation.moyenne >= 16 ? 'Très Bien' :
+                  (deliberation.moyenne >= 14 ? 'Bien' :
+                  (deliberation.moyenne >= 12 ? 'Assez Bien' :
+                  (deliberation.moyenne >= 10 ? 'Passable' : '')))}"></span>
+            </td>
+            <td th:text="${deliberation.totalCredits}"></td>
+
+            <td>
+              <span th:if="${deliberation.admis}"
+                    class="badge bg-success py-1">Admis</span>
+                  <span th:unless="${deliberation.admis}" class="badge bg-danger py-1">Non Admis</span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row g-3 mb-4">
+      <!-- Cartes réduites -->
+      <div class="col-6 col-md-3">
+        <div class="stat-card bg-white p-3 text-center">
+          <h6 class="text-secondary mb-2">Étudiants</h6>
+          <div class="highlight-number" th:text="${stats.totalEtudiants}"></div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="stat-card bg-white p-3 text-center">
+          <h6 class="text-secondary mb-2">Réussite</h6>
+          <div class="highlight-number">
+            <span th:text="${#numbers.formatDecimal(stats.tauxReussite, 1, 2)}"></span>%
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="stat-card bg-white p-3 text-center">
+          <h6 class="text-secondary mb-2">Admis</h6>
+          <div class="highlight-number text-success" th:text="${stats.admis}"></div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="stat-card bg-white p-3">
+          <h6 class="text-secondary mb-2">Mentions</h6>
+          <div class="d-flex flex-wrap gap-1">
+                        <span th:each="entry : ${stats.mentions}"
+                              class="badge bg-primary py-1 px-2">
+                            <span th:text="${entry.key}"></span>:
+                            <span th:text="${entry.value}"></span>
+                        </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <a th:href="@{/Administrateur/Accueil}">Retour à l'accueil</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Modifier la note</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>Modifier la note</h1>
+    <form th:action="@{/modifier-note/{id}(id=${note.id})}" th:object="${note}" method="post">
+        <div class="mb-3">
+            <label for="noteControleContinu" class="form-label">Note CC</label>
+            <input type="number" id="noteControleContinu" class="form-control" th:field="*{noteControleContinu}" required>
+        </div>
+        <div class="mb-3">
+            <label for="noteExamen" class="form-label">Note Examen</label>
+            <input type="number" id="noteExamen" class="form-control" th:field="*{noteExamen}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+    </form>
+    <a href="#" th:href="@{/liste-notes}">Retour à la liste des notes</a>
+</div>
+</body>
+</html>

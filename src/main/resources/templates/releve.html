@@ -1,0 +1,305 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Relevé de Notes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Style identique au PDF */
+        .releve-container {
+            font-family: 'Helvetica', Arial, sans-serif;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 30px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .header-pdf {
+            text-align: center;
+            border-bottom: 3px solid #333;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .module-table {
+            width: 100%;
+            margin-bottom: 25px;
+            border-collapse: collapse;
+        }
+
+        .module-header {
+            background-color: #333;
+            color: white;
+            padding: 12px;
+            font-weight: bold;
+        }
+
+        .component-row td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .total-row {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .mention-finale {
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+    </style>
+    <style>
+        /* Styles généraux */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #2c3e50;
+            padding: 10px 20px;
+            color: white;
+        }
+
+        .navbar .nav {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar .nav li {
+            margin-right: 15px;
+        }
+        .navbar .nav li a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            transition: background-color 0.3s;
+        }
+        .navbar .nav li a:hover {
+            background-color: #34495e;
+            border-radius: 10px;
+        }
+        /* Pour forcer le bloc d'infos utilisateur à se placer à droite */
+        .navbar .navbar-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }
+        /* Dropdown pour le compte utilisateur */
+        .dropdown {
+            position: relative;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #34495e;
+            min-width: 150px;
+            list-style: none;
+            padding: 10px 0;
+            margin: 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .dropdown-menu li a {
+            display: block;
+            padding: 8px 16px;
+            color: white;
+            text-decoration: none;
+        }
+        .dropdown-menu li a:hover {
+            background-color: #2c3e50;
+        }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+         /* Styles pour l'en-tête universitaire */
+
+/* Styles pour l'en-tête universitaire */
+.university-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 30px;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+    </style>
+
+</head>
+<body class="bg-light">
+<!-- En-tête et menu identiques à votre version -->
+
+<header>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-left">
+                    <li>
+                        <a th:src="@{/images/img.png}" ><span>Accueil</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/formations}"><span>Formation</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/Enseignants}"><span>Enseignant</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/etudiants}"><span>Etudiant</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/assignerResponsable}"><span>Assigner</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/liste}"><span>Inscription Formation</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/inscriptionModule}"><span>Inscription Module</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/deliberation}"><span>Délibération</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/releve/selectionner}"><span>Relevé</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/AffichageListes}"><span>Liste</span></a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <!-- Afficher le nom et prénom de l'administrateur connecté -->
+                            <span th:text="${prenom + ' ' + nom}"></span><span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a th:href="@{/profil}"><span>Profil</span></a>
+                            </li>
+                            <li><a th:href="@{/logout}"><i class="fa fa-sign-out"></i> Déconnexion</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</header>
+
+<div class="container py-4 releve-container">
+    <!-- Formulaire de sélection -->
+    <div class="mb-5">
+        <form th:action="@{/releve}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <div class="mb-3">
+                <select class="form-select form-select-lg" name="etudiantId" required>
+                    <option value="">Choisir un étudiant...</option>
+                    <option th:each="etudiant : ${etudiants}"
+                            th:value="${etudiant.id}"
+                            th:text="${etudiant.prenom + ' ' + etudiant.nom + ' (' + etudiant.matricule + ')'}"
+                            th:selected="${etudiant.id == releve?.etudiant?.id}">
+                    </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg w-100">
+                Afficher le relevé
+            </button>
+        </form>
+    </div>
+
+    <!-- Relevé de notes (identique au PDF) -->
+    <div th:if="${releve}">
+        <div class="header-pdf">
+            <h2>Relevé de note definitif</h2>
+            <h4 th:text="${releve.etudiant.formation.intitule}"></h4>
+            <p class="mb-0" th:text="${releve.etudiant.prenom + ' ' + releve.etudiant.nom}"></p>
+        </div>
+
+        <!-- Modules -->
+        <div th:each="module : ${releve.modules}">
+            <table class="module-table">
+                <thead>
+                <tr>
+                    <th colspan="4" class="module-header">
+                        [[${module.codeModule}]] - [[${module.libelleModule}]]
+                    </th>
+                </tr>
+                <tr>
+                    <th>Composante</th>
+                    <th>CC</th>
+                    <th>Examen</th>
+                    <th>Moyenne EC</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr class="component-row" th:each="composante : ${module.components}">
+                    <td th:text="${composante.libelleComponent}"></td>
+                    <td th:text="${#numbers.formatDecimal(composante.noteCC, 1, 2, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatDecimal(composante.noteExamen, 1, 2, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatDecimal(composante.moyenneEC, 1, 2, 'COMMA')}"></td>
+                </tr>
+
+                <tr class="total-row">
+                    <td colspan="3">Moyenne Module</td>
+                    <td th:text="${#numbers.formatDecimal(module.moyenneModule, 1, 2, 'COMMA')}"></td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="3">Crédits</td>
+                    <td th:text="${module.credits}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Remplacer la section "Mention finale" par ceci -->
+        <div class="mention-finale">
+            <div class="text-center mb-3">
+                <!-- Décision d'admission -->
+                <h3 th:classappend="${releve.admis} ? 'text-success' : 'text-danger'"
+                    th:text="${releve.admis} ? 'ADMIS' : 'NON ADMIS'"
+                    style="font-size: 1.5rem; font-weight: bold;">
+                </h3>
+
+                <!-- Crédits obtenus -->
+                <div th:if="${releve.admis}" class="mt-2">
+                    <span class="fw-bold">Crédits validés : </span>
+                    <span class="text-primary" th:text="${releve.totalCredits} + '/30'"></span>
+                </div>
+            </div>
+
+            <!-- Mention générale -->
+            <div class="text-center">
+                <span class="fw-bold">Mention : </span>
+                <span th:text="${releve.mentionGenerale}"
+                      th:classappend="${releve.mentionGenerale == 'Non admis'} ? 'text-danger' : 'text-dark'"
+                      style="font-size: 1.2rem;">
+        </span>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <div class="mb-2">
+                    <div class="my-3 p-2 bg-light rounded border">
+            <span class="fw-bold fs-4 text-primary">
+                Crédits validés :
+                <span th:text="${releve.totalCredits} + '/30'"></span>
+            </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</div>
+
+<!-- Scripts Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<div>
+    <a th:href="@{/Administrateur/Accueil}">Retour à l'accueil</a>
+</div>
+</body>
+</html>

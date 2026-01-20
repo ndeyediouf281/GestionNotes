@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" href="../static/css/buttons.dataTables.min.css" th:href="@{/css/buttons.dataTables.min.css}"/>
+    <link rel="stylesheet" href="../static/css/jquery.dataTables.min.css" th:href="@{/css/jquery.dataTables.min.css}"/>
+
+    <!-- Ajout de Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <script src="../static/js/jquery-3.7.0.js" th:src="@{/js/jquery-3.7.0.js}"></script>
+    <script src="../static/js/bootstrap.js" th:src="@{/js/bootstrap.js}"></script>
+    <script src="../static/js/dataTables.buttons.min.js" th:src="@{/js/dataTables.buttons.min.js}"></script>
+    <script src="../static/js/jquery.dataTables.min.js" th:src="@{/js/jquery.dataTables.min.js}"></script>
+
+    <title>Authentification</title>
+    <style>
+        /* Styles généraux */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #2c3e50, #3498db); /* Arrière-plan en dégradé */
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre portée */
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center; /* Centrer horizontalement */
+        }
+
+        .form-control {
+    width: 100%;
+    max-width: 500px; /* Largeur maximale */
+    min-width: 300px; /* Largeur minimale */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+        .form-control:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .btn-success {
+            width: 100%;
+            max-width: 300px; /* Limiter la largeur du bouton */
+            padding: 10px;
+            background-color: #3498db;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 0 auto; /* Centrer le bouton */
+        }
+
+        .btn-success:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-success i {
+            margin-right: 10px;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-sm-offset-1">
+            <h1>Authentification</h1>
+            <form th:action="@{/login}" name="login" role="form" class="form-horizontal" method="post" accept-charset="utf-8">
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <input name="username" th:placeholder="Username" class="form-control" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <input name="password" th:placeholder="Password" class="form-control" type="password"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-0 col-md-8">
+                        <button class="btn btn-success">
+                            <i class="fa fa-sign-in-alt"></i> Connexion
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <p>Pas encore de compte ? <a href="/register">Inscrivez-vous ici</a></p>
+
+</div>
+
+
+</body>
+</html>

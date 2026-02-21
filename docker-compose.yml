@@ -20,9 +20,7 @@ services:
     restart: on-failure
     ports:
       - "8082:8082"
-    labels:
-      - "coolify.managed=true"
-      - "coolify.application=true"
+    
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/GestionNotes
       SPRING_DATASOURCE_USERNAME: root
